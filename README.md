@@ -1,6 +1,6 @@
 # Create your own cli
 
-Create your own Nodejs cli with figlet and inquirer library.
+Create your own Nodejs cli with amazing libraries which helps handling color, animation and user input with ease.
 
 - [figlet](https://github.com/patorjk/figlet.js#readme) - fully implement FIGfont spec in JavaScript which converts text to ASCII art.
 - [inquirer.js](https://github.com/SBoudrias/Inquirer.js#readme) - a collection of common interactive CLI used to implement pretty user interfaces and layouts
