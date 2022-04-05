@@ -44,7 +44,7 @@ const askMenu = async () => {
 const loading = async () => {
   const spinner = createSpinner('Cooking...');
   spinner.start();
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
   spinner.success({ text: 'Your order is ready' });
 };
 
@@ -65,6 +65,8 @@ Your order: ${customerDessert} and ${customerDrink}
 Price: $${price.toFixed(2)}
   `,
       {
+        title: 'Neverrest Cafe Receipt',
+        titleAlignment: 'center',
         padding: 1,
         margin: 1,
         borderStyle: 'single',
