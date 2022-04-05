@@ -4,11 +4,13 @@ import inquirer from 'inquirer';
 import gradient from 'gradient-string';
 import boxen from 'boxen';
 import { createSpinner } from 'nanospinner';
+import { menu } from './menu.js';
 
 let customerName,
   customerDessert,
   customerDrink,
-  price = 100;
+  menuData = menu,
+  price = 0;
 
 const askName = async () => {
   const { name } = await inquirer.prompt({
@@ -24,19 +26,14 @@ const askMenu = async () => {
     type: 'list',
     name: 'dessert',
     message: 'What dessert would you like to order?',
-    choices: [
-      'Coconut Cake',
-      'Almond Cheesecake',
-      'Blueberry Cookies',
-      'Almond Brownies',
-    ],
+    choices: menuData.desserts.map((dessert) => dessert.name),
   });
 
   const { drink } = await inquirer.prompt({
     type: 'list',
     name: 'drink',
     message: 'What would you like to drink?',
-    choices: ['Coffee', 'Tea', 'Orange Juice', 'Apple Juice'],
+    choices: menuData.drinks.map((drink) => drink.name),
   });
 
   customerDessert = dessert;
@@ -51,13 +48,21 @@ const loading = async () => {
   spinner.success({ text: 'Your order is ready' });
 };
 
-const printResult = async () => {
+const calculatePrice = () => {
+  const dessert = menuData.desserts.find(
+    (dessert) => dessert.name === customerDessert
+  );
+  const drink = menuData.drinks.find((drink) => drink.name === customerDrink);
+  price = dessert.price + drink.price;
+};
+
+const printResult = () => {
   console.log(
     boxen(
       `
 Name: ${customerName}
 Your order: ${customerDessert} and ${customerDrink}
-Price: $${price}
+Price: $${price.toFixed(2)}
   `,
       {
         padding: 1,
@@ -82,14 +87,15 @@ const greet = async () => {
   await new Promise((resolve) => setTimeout(resolve, 100));
 
   console.log(`
-Welcome to ${chalk.blue(title)}!
-Lovely cafe to enjoy every meal with outdoor seating with a chilling atmosphere.
-Select your menu and enjoy your meal.
-`);
+  Welcome to ${chalk.cyan(title)}!
+  Lovely cafe to enjoy every meal with outdoor seating with a chilling atmosphere.
+  Select your menu and enjoy your meal.
+  `);
 
   await askName();
   await askMenu();
   await loading();
+  calculatePrice();
   await new Promise((resolve) => setTimeout(resolve, 1000));
   await printResult();
 };
