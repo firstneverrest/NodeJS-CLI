@@ -21,6 +21,17 @@ const askUserInput = async () => {
     message: 'What is your project name?',
   });
 
+  userInput.directoryName = directoryName;
+
+  while (fs.existsSync(`./${userInput.directoryName}`)) {
+    const { directoryName } = await inquirer.prompt({
+      type: 'input',
+      name: 'directoryName',
+      message: 'Directory already exists! What is your project name?',
+    });
+    userInput.directoryName = directoryName;
+  }
+
   const { gitignore } = await inquirer.prompt({
     type: 'confirm',
     name: 'gitignore',
@@ -39,7 +50,6 @@ const askUserInput = async () => {
     message: 'Do you want to add a README.md file?',
   });
 
-  userInput.directoryName = directoryName;
   userInput.gitignore = gitignore;
   userInput.packageJson = packageJson;
   userInput.readme = readme;
@@ -48,11 +58,7 @@ const askUserInput = async () => {
 const createDirectory = async () => {
   if (!fs.existsSync(userInput.directoryName)) {
     fs.mkdir(userInput.directoryName, (err) => {
-      if (err) console.log(err);
-    });
-  } else {
-    fs.rmdir(userInput.directoryName, (err) => {
-      if (err) console.log(err);
+      if (err) console.log('Directory was already created!');
     });
   }
 };
@@ -136,7 +142,12 @@ ${chalk.green('Gitignore:')} ${chalk.yellow(userInput.gitignore)}
 ${chalk.green('Package.json:')} ${chalk.yellow(userInput.packageJson)}
 ${chalk.green('README.md:')} ${chalk.yellow(userInput.readme)}
     `,
-      { padding: 1 }
+      {
+        padding: 1,
+        margin: 1,
+        title: 'NodeJS Starter Pack',
+        titleAlignment: 'center',
+      }
     )
   );
 };
