@@ -99,9 +99,9 @@ const createFiles = async () => {
   spinner.start();
 
   await createDirectory();
-  await createGitIgnore();
-  await createPackageJson();
-  await createReadme();
+  if (userInput.gitignore) await createGitIgnore();
+  if (userInput.packageJson) await createPackageJson();
+  if (userInput.readme) await createReadme();
 
   spinner.success({ text: 'Files were created!' });
 };
